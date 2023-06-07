@@ -1,18 +1,25 @@
 package com.acme.demo.api;
 
-import com.acme.configurable.ConfiguredType;
+import java.util.Map;
 
 /**
  * WebServer !
  * This class is hand-crafted.
  */
-public class WebServer implements ConfiguredType<WebServerConfig, WebServerRuntime> {
+public class WebServer implements WebServerPrototype {
 
-    private final WebServerRuntimeImpl runtime;
+    private final WebServerConfig config;
+    private final Map<String, SocketListener> sockets;
     private boolean started;
 
-    private WebServer(WebServerRuntimeImpl runtime) {
-        this.runtime = runtime;
+    /**
+     * Create a new instance.
+     *
+     * @param prototype prototype
+     */
+    WebServer(WebServerPrototype prototype) {
+        config = prototype.config();
+        sockets = prototype.sockets();
     }
 
     /**
@@ -24,38 +31,14 @@ public class WebServer implements ConfiguredType<WebServerConfig, WebServerRunti
         return new WebServerBuilder();
     }
 
-    /**
-     * Create a new default instance.
-     *
-     * @return new instance
-     */
-    public static WebServer create() {
-        return builder().build();
-    }
-
-    /**
-     * Create a new instance.
-     *
-     * @param config typed configuration
-     * @return new instance
-     */
-    public static WebServer create(WebServerConfig config) {
-        return new WebServer(new WebServerRuntimeImpl(config));
-    }
-
-    /**
-     * Create a new instance.
-     *
-     * @param builder builder
-     * @return new instance
-     */
-    public static WebServer create(WebServerBuilder builder) {
-        return new WebServer(builder.buildRuntime());
+    @Override
+    public WebServerConfig config() {
+        return config;
     }
 
     @Override
-    public WebServerRuntime runtime() {
-        return runtime;
+    public Map<String, SocketListener> sockets() {
+        return sockets;
     }
 
     /**

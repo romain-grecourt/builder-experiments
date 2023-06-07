@@ -1,16 +1,20 @@
 package com.acme.demo.api;
 
-import com.acme.configurable.ConfiguredType;
-
 /**
  * Socket listener.
  */
-public class SocketListener implements ConfiguredType<SocketListenerConfig, SocketListenerRuntime> {
+public class SocketListener implements SocketListenerPrototype {
 
-    private final SocketListenerRuntimeImpl runtime;
+    private final SocketListenerConfig config;
+    private int port;
 
-    private SocketListener(SocketListenerRuntimeImpl runtime) {
-        this.runtime = runtime;
+    /**
+     * Create a new instance.
+     *
+     * @param prototype config
+     */
+    SocketListener(SocketListenerPrototype prototype) {
+        this.config = prototype.config();
     }
 
     /**
@@ -22,37 +26,17 @@ public class SocketListener implements ConfiguredType<SocketListenerConfig, Sock
         return new SocketListenerBuilder();
     }
 
-    /**
-     * Create a new default instance.
-     *
-     * @return new instance
-     */
-    public static SocketListener create() {
-        return builder().build();
-    }
-
-    /**
-     * Create a new instance.
-     *
-     * @param config typed configuration
-     * @return new instance
-     */
-    static SocketListener create(SocketListenerConfig config) {
-        return new SocketListener(new SocketListenerRuntimeImpl(config));
-    }
-
-    /**
-     * Create a new instance.
-     *
-     * @param builder builder
-     * @return new instance
-     */
-    static SocketListener create(SocketListenerBuilder builder) {
-        return new SocketListener(builder.buildRuntime());
-    }
-
     @Override
-    public SocketListenerRuntime runtime() {
-        return runtime;
+    public SocketListenerConfig config() {
+        return config;
+    }
+
+    /**
+     * Get the effective port.
+     *
+     * @return port
+     */
+    public int port() {
+        return port;
     }
 }
