@@ -5,5 +5,12 @@ import com.acme.configurable.ConfiguredPrototype;
 /**
  * {@link SocketListener} prototype.
  */
-public interface SocketListenerPrototype<T extends ListenerConfig> extends ConfiguredPrototype<T> {
+public interface SocketListenerPrototype<T extends SocketListenerConfig> extends ConfiguredPrototype<T> {
+
+    // TODO
+    // Context context()
+    // RequestedUriDiscoveryContext discoveryContext()
+    // DirectHandlers directHandlers
+    // InetAddress bindAddress() // alias to address
+
 }

@@ -3,11 +3,11 @@ package com.acme.demo.api;
 import com.acme.builder.Builder;
 
 /**
- * Builder of {@link ListenerConfig}.
+ * Builder of {@link SocketListenerConfig}.
  */
 public final class ListenerConfigBuilder
         extends ListenerBuilderBase<ListenerConfigBuilder>
-        implements Builder<ListenerConfig> {
+        implements Builder<SocketListenerConfig> {
 
     /**
      * Create a new instance.
@@ -16,7 +16,7 @@ public final class ListenerConfigBuilder
     }
 
     @Override
-    public ListenerConfig build() {
+    public SocketListenerConfig build() {
         return new ListenerConfigImpl(this);
     }
 }

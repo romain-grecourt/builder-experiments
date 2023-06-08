@@ -11,7 +11,7 @@ import java.util.Map;
  * {@link WebServer} typed configuration.
  */
 @Configured
-public interface WebServerConfig extends ListenerConfig {
+public interface WebServerConfig extends SocketListenerConfig {
 
     /**
      * Host of the default socket. Defaults to all host addresses ({@code 0.0.0.0}).
@@ -33,9 +33,9 @@ public interface WebServerConfig extends ListenerConfig {
     /**
      * Sockets listeners configuration.
      *
-     * @return map of {@link ListenerConfig} keyed by socket names
+     * @return map of {@link SocketListenerConfig} keyed by socket names
      */
-    Map<String, ListenerConfig> sockets();
+    Map<String, SocketListenerConfig> sockets();
 
     /**
      * Indicate whether server threads should inherit inheritable thread locals.

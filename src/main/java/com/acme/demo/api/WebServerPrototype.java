@@ -17,6 +17,8 @@ public interface WebServerPrototype extends SocketListenerPrototype<WebServerCon
      */
     Map<String, SocketListener> sockets();
 
+    // TODO Map<String, Router> routers();
+
     /**
      * Get the content encoding context.
      *

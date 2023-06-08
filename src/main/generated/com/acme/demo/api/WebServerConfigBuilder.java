@@ -12,7 +12,7 @@ import java.util.Map;
 public final class WebServerConfigBuilder extends WebServerBuilderBase<WebServerConfigBuilder>
         implements Builder<WebServerConfig> {
 
-    private final Map<String, ListenerConfig> sockets = new HashMap<>();
+    private final Map<String, SocketListenerConfig> sockets = new HashMap<>();
 
     /**
      * Create a new instance.
@@ -26,7 +26,7 @@ public final class WebServerConfigBuilder extends WebServerBuilderBase<WebServer
     }
 
     @Override
-    public Map<String, ListenerConfig> sockets() {
+    public Map<String, SocketListenerConfig> sockets() {
         return sockets;
     }
 

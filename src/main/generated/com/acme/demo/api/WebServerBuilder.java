@@ -58,8 +58,8 @@ public class WebServerBuilder extends WebServerBuilderBase<WebServerBuilder>
     }
 
     @Override
-    public Map<String, ListenerConfig> sockets() {
-        Map<String, ListenerConfig> socketsConfig = new HashMap<>();
+    public Map<String, SocketListenerConfig> sockets() {
+        Map<String, SocketListenerConfig> socketsConfig = new HashMap<>();
         sockets.forEach((k, v) -> socketsConfig.put(k, v.config()));
         return socketsConfig;
     }

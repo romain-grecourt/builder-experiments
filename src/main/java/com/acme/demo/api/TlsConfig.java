@@ -17,6 +17,7 @@ public interface TlsConfig extends ConfigType {
 
     List<String> enabledProtocols();
 
+    @ConfiguredOption("1024")
     int sessionCacheSize();
 
     @ConfiguredOption(key = "cipher-suite")

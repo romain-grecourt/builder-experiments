@@ -7,4 +7,9 @@ public interface Prototype {
     @interface Alias {
         String value();
     }
+
+    @interface Option {
+        String initializer() default "";
+        String value() default "";
+    }
 }

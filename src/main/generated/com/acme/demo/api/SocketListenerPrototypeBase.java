@@ -5,19 +5,19 @@ package com.acme.demo.api;
  */
 abstract class SocketListenerPrototypeBase implements SocketListenerPrototype {
 
-    private final ListenerConfig config;
+    private final SocketListenerConfig config;
 
     /**
      * Create a new instance.
      *
      * @param config config
      */
-    protected SocketListenerPrototypeBase(ListenerConfig config) {
+    protected SocketListenerPrototypeBase(SocketListenerConfig config) {
         this.config = config;
     }
 
     @Override
-    public ListenerConfig config() {
+    public SocketListenerConfig config() {
         return config;
     }
 }

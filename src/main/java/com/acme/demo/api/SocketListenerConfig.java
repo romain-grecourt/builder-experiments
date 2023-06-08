@@ -11,7 +11,7 @@ import com.acme.demo.spi.MediaSupportProvider;
  * {@link SocketListener} typed config.
  */
 @Configured
-public interface ListenerConfig extends ConfigType {
+public interface SocketListenerConfig extends ConfigType {
 
     /**
      * Port.

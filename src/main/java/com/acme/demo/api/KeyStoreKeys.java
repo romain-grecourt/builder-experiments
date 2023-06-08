@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * {@link KeyStore} based implementation of {@link Keys}.
+ * {@link KeyStore} based implementation of {@link KeysSupport}.
  */
 public class KeyStoreKeys extends ConfiguredTypeBase<KeyStoreKeysConfig> implements KeysSupport {
 
@@ -38,34 +38,18 @@ public class KeyStoreKeys extends ConfiguredTypeBase<KeyStoreKeysConfig> impleme
         super(prototype);
         KeyStoreKeysConfig config = prototype.config();
         Resource resource = prototype.keystore();
-        char[] keystorePassphrase = config.keystorePassphrase().orElse(null);
         if (resource != null) {
-            KeyStore keyStore;
-            InputStream is = resource.stream();
-            String message = "keystore" + ":" + resource.sourceType() + ":" + resource.location();
-            try {
-                keyStore = PkiUtil.loadKeystore(config.keystoreType(), is, keystorePassphrase, message);
-            } finally {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    LOGGER.log(Level.WARNING, "Failed to close input stream: " + message, e);
-                }
-            }
-
+            char[] keystorePassphrase = config.keystorePassphrase().orElse(null);
             char[] keyPassphrase = config.keyPassphrase().orElse(keystorePassphrase);
             String keyAlias = config.keyAlias().orElse(null);
             String certChainAlias = config.certChainAlias().orElse(null);
             String certAlias = config.certAlias().orElse(null);
 
+            KeyStore keyStore = loadKeyStore(resource, config().keystoreType(), keystorePassphrase);
             privateKey = loadPrivateKey(keyStore, keyAlias, keyPassphrase);
             certChain = loadCertChain(keyStore, certChainAlias, keyAlias);
             publicCert = loadPublicCert(keyStore, certChain, certAlias);
-            if (publicCert != null) {
-                publicKey = publicCert.getPublicKey();
-            } else {
-                publicKey = null;
-            }
+            publicKey = publicCert != null ? publicCert.getPublicKey() : null;
 
             if (prototype.trustStore()) {
                 certs.addAll(PkiUtil.loadCertificates(keyStore));
@@ -103,6 +87,20 @@ public class KeyStoreKeys extends ConfiguredTypeBase<KeyStoreKeysConfig> impleme
     @Override
     public List<X509Certificate> certs() {
         return Collections.unmodifiableList(certs);
+    }
+
+    static KeyStore loadKeyStore(Resource resource, String keystoreType, char[] passphrase) {
+        InputStream is = resource.stream();
+        String message = "keystore" + ":" + resource.sourceType() + ":" + resource.location();
+        try {
+            return PkiUtil.loadKeystore(keystoreType, is, passphrase, message);
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                LOGGER.log(Level.WARNING, "Failed to close input stream: " + message, e);
+            }
+        }
     }
 
     static PrivateKey loadPrivateKey(KeyStore keyStore, String keyAlias, char[] passphrase) {

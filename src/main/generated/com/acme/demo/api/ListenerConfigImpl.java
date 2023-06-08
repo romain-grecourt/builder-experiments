@@ -3,9 +3,9 @@ package com.acme.demo.api;
 import io.helidon.config.Config;
 
 /**
- * {@link ListenerConfig} implementation.
+ * {@link SocketListenerConfig} implementation.
  */
-public class ListenerConfigImpl implements ListenerConfig {
+public class ListenerConfigImpl implements SocketListenerConfig {
 
     private final int port;
     private final String host;
@@ -30,7 +30,7 @@ public class ListenerConfigImpl implements ListenerConfig {
      *
      * @return new instance
      */
-    public static ListenerConfig create() {
+    public static SocketListenerConfig create() {
         return builder().build();
     }
 
@@ -39,7 +39,7 @@ public class ListenerConfigImpl implements ListenerConfig {
      *
      * @return new instance
      */
-    public static ListenerConfig create(Config config) {
+    public static SocketListenerConfig create(Config config) {
         return builder().configure(config).build();
     }
 

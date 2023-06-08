@@ -1,7 +1,7 @@
 package com.acme.demo.app;
 
 import com.acme.demo.api.SocketListener;
-import com.acme.demo.api.ListenerConfig;
+import com.acme.demo.api.SocketListenerConfig;
 import com.acme.demo.api.ListenerConfigImpl;
 import com.acme.demo.api.SocketListenerFactory;
 import com.acme.demo.api.WebServer;
@@ -42,7 +42,7 @@ public class Main {
 
     public static void main3(String[] args) {
 
-        ListenerConfig socketListenerConfig = ListenerConfigImpl.create();
+        SocketListenerConfig socketListenerConfig = ListenerConfigImpl.create();
         SocketListenerFactory.create(socketListenerConfig);
 
 

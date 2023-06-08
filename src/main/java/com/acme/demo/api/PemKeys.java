@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@code PKCS#8} based implementation of {@link KeysSupport}.
+ */
 public class PemKeys extends ConfiguredTypeBase<PemKeysConfig> implements KeysSupport {
 
     private final PrivateKey privateKey;

@@ -7,7 +7,7 @@ import com.acme.configurable.ConfiguredTypeBase;
  * Socket listener.
  */
 @Configured
-public class SocketListener extends ConfiguredTypeBase<ListenerConfig> {
+public class SocketListener extends ConfiguredTypeBase<SocketListenerConfig> {
 
     private int port;
 
