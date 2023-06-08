@@ -1,11 +1,14 @@
 package com.acme.demo.api;
 
+import com.acme.configurable.Configured;
+import com.acme.configurable.ConfiguredTypeBase;
+
 /**
  * Socket listener.
  */
-public class SocketListener implements SocketListenerPrototype {
+@Configured
+public class SocketListener extends ConfiguredTypeBase<ListenerConfig> {
 
-    private final SocketListenerConfig config;
     private int port;
 
     /**
@@ -13,8 +16,8 @@ public class SocketListener implements SocketListenerPrototype {
      *
      * @param prototype config
      */
-    SocketListener(SocketListenerPrototype prototype) {
-        this.config = prototype.config();
+    SocketListener(SocketListenerPrototype<?> prototype) {
+        super(prototype);
     }
 
     /**
@@ -22,13 +25,8 @@ public class SocketListener implements SocketListenerPrototype {
      *
      * @return builder
      */
-    public static SocketListenerBuilder builder() {
-        return new SocketListenerBuilder();
-    }
-
-    @Override
-    public SocketListenerConfig config() {
-        return config;
+    public static ListenerBuilder builder() {
+        return new ListenerBuilder();
     }
 
     /**

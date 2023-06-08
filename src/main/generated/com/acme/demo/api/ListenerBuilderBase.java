@@ -8,8 +8,8 @@ import io.helidon.config.Config;
  *
  * @param <SELF> subtype reference
  */
-public abstract class SocketListenerBuilderBase<SELF extends SocketListenerBuilderBase<SELF>>
-        implements Configurable<SELF>, SocketListenerConfig {
+public abstract class ListenerBuilderBase<SELF extends ListenerBuilderBase<SELF>>
+        implements Configurable<SELF>, ListenerConfig {
 
     private int port = 0;
     private String host = "0.0.0.0";

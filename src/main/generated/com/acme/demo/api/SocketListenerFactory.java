@@ -5,12 +5,11 @@ import io.helidon.config.Config;
 
 /**
  * {@link SocketListener} factory.
- * This class is code generated.
  */
 public class SocketListenerFactory extends SocketListenerPrototypeBase
-        implements ConfiguredTypeFactory<SocketListenerConfig, SocketListener> {
+        implements ConfiguredTypeFactory<ListenerConfig, SocketListener> {
 
-    SocketListenerFactory(SocketListenerBuilder builder) {
+    SocketListenerFactory(ListenerBuilder builder) {
         super(builder);
     }
 
@@ -25,7 +24,7 @@ public class SocketListenerFactory extends SocketListenerPrototypeBase
      * @param config typed config
      * @return new instance
      */
-    public static SocketListener create(SocketListenerConfig config) {
+    public static SocketListener create(ListenerConfig config) {
         return new SocketListener(new SocketListenerConfigPrototype(config));
     }
 
@@ -36,7 +35,7 @@ public class SocketListenerFactory extends SocketListenerPrototypeBase
      * @return new instance
      */
     public static SocketListener create(Config config) {
-        return create(SocketListenerConfigImpl.create(config));
+        return create(ListenerConfigImpl.create(config));
     }
 
     /**
@@ -45,6 +44,6 @@ public class SocketListenerFactory extends SocketListenerPrototypeBase
      * @return new instance
      */
     public static SocketListener create() {
-        return create(SocketListenerConfigImpl.create());
+        return create(ListenerConfigImpl.create());
     }
 }

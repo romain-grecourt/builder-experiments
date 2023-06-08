@@ -3,15 +3,14 @@ package com.acme.demo.api;
 import io.helidon.config.Config;
 
 /**
- * {@link SocketListenerConfig} implementation.
- * This class is code generated.
+ * {@link ListenerConfig} implementation.
  */
-public class SocketListenerConfigImpl implements SocketListenerConfig {
+public class ListenerConfigImpl implements ListenerConfig {
 
     private final int port;
     private final String host;
 
-    SocketListenerConfigImpl(SocketListenerBuilderBase<?> builder) {
+    ListenerConfigImpl(ListenerBuilderBase<?> builder) {
         this.port = builder.port();
         this.host = builder.host();
     }
@@ -31,7 +30,7 @@ public class SocketListenerConfigImpl implements SocketListenerConfig {
      *
      * @return new instance
      */
-    public static SocketListenerConfig create() {
+    public static ListenerConfig create() {
         return builder().build();
     }
 
@@ -40,7 +39,7 @@ public class SocketListenerConfigImpl implements SocketListenerConfig {
      *
      * @return new instance
      */
-    public static SocketListenerConfig create(Config config) {
+    public static ListenerConfig create(Config config) {
         return builder().configure(config).build();
     }
 
@@ -49,7 +48,7 @@ public class SocketListenerConfigImpl implements SocketListenerConfig {
      *
      * @return builder
      */
-    public static SocketListenerConfigBuilder builder() {
-        return new SocketListenerConfigBuilder();
+    public static ListenerConfigBuilder builder() {
+        return new ListenerConfigBuilder();
     }
 }

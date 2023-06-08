@@ -1,19 +1,53 @@
 package com.acme.demo.api;
 
-import java.util.Map;
+import com.acme.configurable.Configured;
+import com.acme.configurable.ConfiguredOption;
+import com.acme.configurable.ServiceProviderConfig;
+import com.acme.demo.spi.ServerConnectionSelector;
 
-import com.acme.configurable.ConfigType;
+import java.util.Map;
 
 /**
  * {@link WebServer} typed configuration.
- * This class is hand-crafted.
  */
-public interface WebServerConfig extends ConfigType {
+@Configured
+public interface WebServerConfig extends ListenerConfig {
 
     /**
-     * Sockets.
+     * Host of the default socket. Defaults to all host addresses ({@code 0.0.0.0}).
      *
-     * @return sockets
+     * @return host address to listen on (for the default socket)
      */
-    Map<String, SocketListenerConfig> sockets();
+    @ConfiguredOption("0.0.0.0")
+    String host();
+
+    /**
+     * Port of the default socket.
+     * If configured to {@code 0} (the default), server starts on a random port.
+     *
+     * @return port to listen on (for the default socket)
+     */
+    @ConfiguredOption("0")
+    int port();
+
+    /**
+     * Sockets listeners configuration.
+     *
+     * @return map of {@link ListenerConfig} keyed by socket names
+     */
+    Map<String, ListenerConfig> sockets();
+
+    /**
+     * Indicate whether server threads should inherit inheritable thread locals.
+     *
+     * @return {@code true} if server threads should inherit inheritable thread locals
+     */
+    boolean inheritThreadLocals();
+
+    /**
+     * Connection providers configuration.
+     *
+     * @return connection providers configuration
+     */
+    ServiceProviderConfig<ServerConnectionSelector> connectionProviders();
 }

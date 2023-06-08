@@ -22,4 +22,21 @@
             <version>3.2.1</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <compileSourceRoots>
+                        <compileSourceRoot>${project.basedir}/src/main/java</compileSourceRoot>
+                        <compileSourceRoot>${project.basedir}/src/main/generated</compileSourceRoot>
+                        <compileSourceRoot>${project.basedir}/target/generated-sources</compileSourceRoot>
+                    </compileSourceRoots>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

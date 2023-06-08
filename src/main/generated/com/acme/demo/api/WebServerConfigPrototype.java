@@ -5,7 +5,6 @@ import java.util.Map;
 
 /**
  * {@link WebServerPrototype} adapter for {@link WebServerConfig}.
- * This class is code generated.
  */
 final class WebServerConfigPrototype extends WebServerPrototypeBase {
 

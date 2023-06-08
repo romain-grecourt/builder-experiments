@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 /**
  * {@link WebServer} factory.
- * This class is code generated.
  */
 public class WebServerFactory extends WebServerPrototypeBase
         implements ConfiguredTypeFactory<WebServerConfig, WebServer> {

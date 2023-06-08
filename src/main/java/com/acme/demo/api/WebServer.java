@@ -1,14 +1,14 @@
 package com.acme.demo.api;
 
+import com.acme.configurable.ConfiguredTypeBase;
+
 import java.util.Map;
 
 /**
  * WebServer !
- * This class is hand-crafted.
  */
-public class WebServer implements WebServerPrototype {
+public class WebServer extends ConfiguredTypeBase<WebServerConfig> {
 
-    private final WebServerConfig config;
     private final Map<String, SocketListener> sockets;
     private boolean started;
 
@@ -18,7 +18,7 @@ public class WebServer implements WebServerPrototype {
      * @param prototype prototype
      */
     WebServer(WebServerPrototype prototype) {
-        config = prototype.config();
+        super(prototype);
         sockets = prototype.sockets();
     }
 
@@ -31,12 +31,11 @@ public class WebServer implements WebServerPrototype {
         return new WebServerBuilder();
     }
 
-    @Override
-    public WebServerConfig config() {
-        return config;
-    }
-
-    @Override
+    /**
+     * Get the socket listeners.
+     *
+     * @return map of socket listeners keyed by socket names
+     */
     public Map<String, SocketListener> sockets() {
         return sockets;
     }

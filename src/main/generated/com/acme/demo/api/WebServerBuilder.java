@@ -10,7 +10,6 @@ import java.util.function.Supplier;
 
 /**
  * {@link WebServer} meta-builder.
- * This class is code-generated.
  */
 public class WebServerBuilder extends WebServerBuilderBase<WebServerBuilder>
         implements ConfiguredTypeBuilder<WebServerBuilder, WebServerFactory, WebServer> {
@@ -47,8 +46,8 @@ public class WebServerBuilder extends WebServerBuilderBase<WebServerBuilder>
      * @param consumer socket builder supplier
      * @return this builder
      */
-    public WebServerBuilder socket(String name, Consumer<SocketListenerBuilder> consumer) {
-        SocketListenerBuilder builder = SocketListener.builder();
+    public WebServerBuilder socket(String name, Consumer<ListenerBuilder> consumer) {
+        ListenerBuilder builder = SocketListener.builder();
         consumer.accept(builder);
         return socket(name, builder);
     }
@@ -59,8 +58,8 @@ public class WebServerBuilder extends WebServerBuilderBase<WebServerBuilder>
     }
 
     @Override
-    public Map<String, SocketListenerConfig> sockets() {
-        Map<String, SocketListenerConfig> socketsConfig = new HashMap<>();
+    public Map<String, ListenerConfig> sockets() {
+        Map<String, ListenerConfig> socketsConfig = new HashMap<>();
         sockets.forEach((k, v) -> socketsConfig.put(k, v.config()));
         return socketsConfig;
     }

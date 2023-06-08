@@ -4,10 +4,9 @@ import com.acme.configurable.ConfiguredTypeBuilder;
 
 /**
  * {@link SocketListener} builder.
- * This class is code-generated.
  */
-public class SocketListenerBuilder extends SocketListenerBuilderBase<SocketListenerBuilder>
-        implements ConfiguredTypeBuilder<SocketListenerBuilder, SocketListenerFactory, SocketListener> {
+public class ListenerBuilder extends ListenerBuilderBase<ListenerBuilder>
+        implements ConfiguredTypeBuilder<ListenerBuilder, SocketListenerFactory, SocketListener> {
 
     @Override
     public SocketListenerFactory build0() {

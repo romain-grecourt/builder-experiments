@@ -2,23 +2,22 @@ package com.acme.demo.api;
 
 /**
  * Base implementation of {@link SocketListenerPrototype}.
- * This class is code generated.
  */
 abstract class SocketListenerPrototypeBase implements SocketListenerPrototype {
 
-    private final SocketListenerConfig config;
+    private final ListenerConfig config;
 
     /**
      * Create a new instance.
      *
      * @param config config
      */
-    protected SocketListenerPrototypeBase(SocketListenerConfig config) {
+    protected SocketListenerPrototypeBase(ListenerConfig config) {
         this.config = config;
     }
 
     @Override
-    public SocketListenerConfig config() {
+    public ListenerConfig config() {
         return config;
     }
 }

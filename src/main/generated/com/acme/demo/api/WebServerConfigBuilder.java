@@ -8,12 +8,11 @@ import java.util.Map;
 
 /**
  * Builder for {@link WebServerConfig}.
- * This class is code generated.
  */
 public final class WebServerConfigBuilder extends WebServerBuilderBase<WebServerConfigBuilder>
         implements Builder<WebServerConfig> {
 
-    private final Map<String, SocketListenerConfig> sockets = new HashMap<>();
+    private final Map<String, ListenerConfig> sockets = new HashMap<>();
 
     /**
      * Create a new instance.
@@ -23,11 +22,11 @@ public final class WebServerConfigBuilder extends WebServerBuilderBase<WebServer
 
     @Override
     protected void socket(String name, Config config) {
-        sockets.put(name, SocketListenerConfigImpl.create(config));
+        sockets.put(name, ListenerConfigImpl.create(config));
     }
 
     @Override
-    public Map<String, SocketListenerConfig> sockets() {
+    public Map<String, ListenerConfig> sockets() {
         return sockets;
     }
 

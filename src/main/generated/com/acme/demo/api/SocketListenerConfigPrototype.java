@@ -1,8 +1,7 @@
 package com.acme.demo.api;
 
 /**
- * {@link SocketListenerPrototype} adapter for {@link SocketListenerConfig}.
- * This class is code generated.
+ * {@link SocketListenerPrototype} adapter for {@link ListenerConfig}.
  */
 final class SocketListenerConfigPrototype extends SocketListenerPrototypeBase {
 
@@ -11,7 +10,7 @@ final class SocketListenerConfigPrototype extends SocketListenerPrototypeBase {
      *
      * @param config config
      */
-    SocketListenerConfigPrototype(SocketListenerConfig config) {
+    SocketListenerConfigPrototype(ListenerConfig config) {
         super(config);
     }
 }

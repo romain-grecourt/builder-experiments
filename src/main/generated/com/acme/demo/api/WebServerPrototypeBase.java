@@ -4,7 +4,6 @@ import java.util.Map;
 
 /**
  * Base implementation of {@link WebServerPrototype}.
- * This class is code generated.
  */
 abstract class WebServerPrototypeBase implements WebServerPrototype {
 

@@ -3,7 +3,7 @@ package com.acme.configurable;
 import io.helidon.config.Config;
 
 /**
- * Configurable instance.
+ * A fluent mixin for configurable types.
  *
  * @param <T> subtype reference
  */

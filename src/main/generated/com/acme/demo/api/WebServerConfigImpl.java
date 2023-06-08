@@ -7,11 +7,10 @@ import java.util.Map;
 
 /**
  * {@link WebServerConfig} implementation.
- * This class is code generated.
  */
 public class WebServerConfigImpl implements WebServerConfig {
 
-    private final Map<String, SocketListenerConfig> sockets;
+    private final Map<String, ListenerConfig> sockets;
 
     /**
      * Create a new instance.
@@ -23,7 +22,7 @@ public class WebServerConfigImpl implements WebServerConfig {
     }
 
     @Override
-    public Map<String, SocketListenerConfig> sockets() {
+    public Map<String, ListenerConfig> sockets() {
         return sockets;
     }
 
