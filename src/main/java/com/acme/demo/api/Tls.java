@@ -28,11 +28,15 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
+import com.acme.configurable.ConfigType;
+import com.acme.configurable.ConfiguredOption;
+import com.acme.configurable.ConfiguredPrototype;
 import io.helidon.common.LazyValue;
 
 import com.acme.tls.NotReloadableKeyManager;
@@ -47,7 +51,82 @@ import com.acme.tls.TrustAllManagerFactory;
 /**
  * Tls.
  */
-public class Tls extends ConfiguredTypeBase<TlsConfig> {
+public class Tls extends ConfiguredTypeBase<Tls.Config> {
+
+    /**
+     * {@link Tls} typed configuration.
+     */
+    public interface Config extends ConfigType {
+
+        @ConfiguredOption("NONE")
+        TlsClientAuth tlsClientAuth();
+
+        Keys.TypedConfig privateKey();
+
+        Keys.TypedConfig trustCertificates();
+
+        List<String> enabledProtocols();
+
+        @ConfiguredOption("1024")
+        int sessionCacheSize();
+
+        @ConfiguredOption(key = "cipher-suite")
+        List<String> enabledCipherSuites();
+
+        @ConfiguredOption(key = "session-timeout-seconds")
+        int sessionTimeout();
+
+        boolean enabled();
+    }
+
+    /**
+     * {@link Tls} prototype.
+     */
+    public interface Prototype extends ConfiguredPrototype<Config> {
+
+        String secureRandomAlgorithm();
+
+        String secureRandomProvider();
+
+        SecureRandom secureRandom();
+
+        Keys privateKey();
+
+        Keys trustCertificates();
+
+        List<TlsReloadableComponent> reloadableComponents();
+
+        Duration sessionTimeout();
+
+        List<String> applicationProtocols();
+
+        boolean trustAll();
+
+        @Option(initializer = "java.security.KeyStore::getDefaultType")
+        String internalKeystoreType();
+
+        String internalKeystoreProvider();
+
+        @Option(initializer = "javax.net.ssl.KeyManagerFactory::getDefaultAlgorithm")
+        String keyManagerFactoryAlgorithm();
+
+        String keyManagerFactoryProvider();
+
+        @Option(initializer = "javax.net.ssl.TrustManagerFactory::getDefaultAlgorithm")
+        String trustManagerFactoryAlgorithm();
+
+        String trustManagerFactoryProvider();
+
+        SSLParameters sslParameters();
+
+        @Option(ENDPOINT_IDENTIFICATION_HTTPS)
+        String endpointIdentificationAlgorithm();
+
+        String provider();
+
+        @Option("TLS")
+        String protocol();
+    }
 
     /**
      * HTTPS endpoint identification algorithm, verifies certificate cn against host name.
@@ -71,7 +150,7 @@ public class Tls extends ConfiguredTypeBase<TlsConfig> {
     private final X509KeyManager originalKeyManager;
     private final boolean enabled;
 
-    Tls(TlsPrototype prototype) {
+    Tls(Prototype prototype) {
         super(prototype);
         TlsInitializer initializer = new TlsInitializer(prototype).init();
         sslContext = initializer.sslContext;
@@ -224,7 +303,7 @@ public class Tls extends ConfiguredTypeBase<TlsConfig> {
 
     private static class TlsInitializer {
 
-        private final TlsPrototype prototype;
+        private final Prototype prototype;
         private SSLContext sslContext;
         private SSLParameters sslParameters;
         private SSLSocketFactory sslSocketFactory;
@@ -233,7 +312,7 @@ public class Tls extends ConfiguredTypeBase<TlsConfig> {
         private X509TrustManager originalTrustManager;
         private X509KeyManager originalKeyManager;
 
-        private TlsInitializer(TlsPrototype prototype) {
+        private TlsInitializer(Prototype prototype) {
             this.prototype = prototype;
         }
 
@@ -256,7 +335,7 @@ public class Tls extends ConfiguredTypeBase<TlsConfig> {
                 return sslParameters;
             }
             sslParameters = new SSLParameters();
-            TlsConfig config = prototype.config();
+            Config config = prototype.config();
 
             List<String> applicationProtocols = prototype.applicationProtocols();
             if (applicationProtocols != null) {

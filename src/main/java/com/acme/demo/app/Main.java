@@ -1,12 +1,8 @@
 package com.acme.demo.app;
 
 import com.acme.demo.api.SocketListener;
-import com.acme.demo.api.SocketListenerConfig;
-import com.acme.demo.api.ListenerConfigImpl;
 import com.acme.demo.api.SocketListenerFactory;
 import com.acme.demo.api.WebServer;
-import com.acme.demo.api.WebServerConfig;
-import com.acme.demo.api.WebServerConfigImpl;
 import com.acme.demo.api.WebServerFactory;
 import io.helidon.config.Config;
 
@@ -42,13 +38,13 @@ public class Main {
 
     public static void main3(String[] args) {
 
-        SocketListenerConfig socketListenerConfig = ListenerConfigImpl.create();
+        SocketListener.TypedConfig socketListenerConfig = SocketListenerFactory.typedConfig();
         SocketListenerFactory.create(socketListenerConfig);
 
 
         Config config = Config.create();
-        WebServerConfig serverConfig = WebServerConfigImpl.create(config.get("server"));
-        WebServer server = WebServerFactory.create(serverConfig)
-                                           .start();
+        WebServer.TypedConfig serverConfig = WebServerFactory.typedConfig(config.get("server"));
+        WebServer server = WebServerFactory.create(serverConfig);
+        server.start();
     }
 }

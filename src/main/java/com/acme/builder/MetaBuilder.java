@@ -15,7 +15,7 @@ public interface MetaBuilder<BUILDER extends Builder<TARGET>, TARGET> extends Su
      *
      * @return target builder
      */
-    BUILDER build0();
+    BUILDER builder();
 
     /**
      * Build a "target type" instance via a "target builder".
@@ -23,7 +23,7 @@ public interface MetaBuilder<BUILDER extends Builder<TARGET>, TARGET> extends Su
      * @return new "target type" instance
      */
     default TARGET build() {
-        return build0().build();
+        return builder().build();
     }
 
     @Override

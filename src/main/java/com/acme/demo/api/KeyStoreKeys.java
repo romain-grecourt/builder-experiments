@@ -1,6 +1,10 @@
 package com.acme.demo.api;
 
 import com.acme.common.PkiUtil;
+import com.acme.configurable.ConfigType;
+import com.acme.configurable.Configured;
+import com.acme.configurable.ConfiguredOption;
+import com.acme.configurable.ConfiguredPrototype;
 import com.acme.configurable.ConfiguredTypeBase;
 
 import java.io.IOException;
@@ -18,7 +22,41 @@ import java.util.Optional;
 /**
  * {@link KeyStore} based implementation of {@link KeysSupport}.
  */
-public class KeyStoreKeys extends ConfiguredTypeBase<KeyStoreKeysConfig> implements KeysSupport {
+public class KeyStoreKeys extends ConfiguredTypeBase<KeyStoreKeys.TypedConfig> implements KeysSupport {
+
+    @Configured
+    public interface TypedConfig extends ConfigType {
+
+        @ConfiguredOption(key = "resource")
+        Optional<Resource.TypedConfig> keystore();
+
+        @ConfiguredOption(key = "key.passphrase")
+        Optional<char[]> keyPassphrase();
+
+        @ConfiguredOption(key = "type", value = "PKCS12")
+        String keystoreType();
+
+        @ConfiguredOption(key = "passphrase")
+        Optional<char[]> keystorePassphrase();
+
+        @ConfiguredOption(key = "key.alias")
+        Optional<String> keyAlias();
+
+        @ConfiguredOption(key = "cert.alias")
+        Optional<String> certAlias();
+
+        @ConfiguredOption(key = "cert-chain.alias")
+        Optional<String> certChainAlias();
+
+        Optional<Boolean> trustStore();
+    }
+
+    public interface Prototype extends ConfiguredPrototype<TypedConfig> {
+
+        Resource keystore();
+        boolean trustStore();
+        List<String> certificateAliases();
+    }
 
     private static final System.Logger LOGGER = System.getLogger(KeyStoreKeys.class.getName());
     private static final String DEFAULT_PRIVATE_KEY_ALIAS = "1";
@@ -34,9 +72,9 @@ public class KeyStoreKeys extends ConfiguredTypeBase<KeyStoreKeysConfig> impleme
      *
      * @param prototype prototype
      */
-    KeyStoreKeys(KeyStoreKeysPrototype prototype) {
+    KeyStoreKeys(Prototype prototype) {
         super(prototype);
-        KeyStoreKeysConfig config = prototype.config();
+        TypedConfig config = prototype.config();
         Resource resource = prototype.keystore();
         if (resource != null) {
             char[] keystorePassphrase = config.keystorePassphrase().orElse(null);

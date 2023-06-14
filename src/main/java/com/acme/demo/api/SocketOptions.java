@@ -1,5 +1,8 @@
 package com.acme.demo.api;
 
+import com.acme.configurable.ConfigType;
+import com.acme.configurable.ConfiguredOption;
+import com.acme.configurable.ConfiguredPrototype;
 import com.acme.configurable.ConfiguredTypeBase;
 
 import java.io.IOException;
@@ -19,7 +22,87 @@ import static java.net.StandardSocketOptions.TCP_NODELAY;
 /**
  * Socket options.
  */
-public class SocketOptions extends ConfiguredTypeBase<SocketOptionsConfig> implements SocketOptionsPrototype {
+public class SocketOptions extends ConfiguredTypeBase<SocketOptions.TypedConfig> {
+
+    /**
+     * {@link SocketOptions} typed configuration.
+     */
+    public interface TypedConfig extends ConfigType {
+
+        /**
+         * Read timeout in seconds.
+         *
+         * @return read timeout in seconds
+         */
+        @ConfiguredOption(value = "30", key = "read-timeout-seconds")
+        int readTimeout();
+
+        /**
+         * Connect timeout in seconds.
+         *
+         * @return connect timeout in seconds
+         */
+        @ConfiguredOption(value = "10", key = "connect-timeout-seconds")
+        int connectTimeout();
+
+        /**
+         * Value of {@link java.net.StandardSocketOptions#SO_SNDBUF}.
+         *
+         * @return send buffer size, in bytes
+         */
+        @ConfiguredOption("32768")
+        int sendBufferSize();
+
+        /**
+         * Value of {@link java.net.StandardSocketOptions#SO_RCVBUF}.
+         *
+         * @return receive buffer size, in bytes
+         */
+        @ConfiguredOption("32768")
+        int receiveBufferSize();
+
+        /**
+         * Whether to use {@link java.net.StandardSocketOptions#SO_KEEPALIVE}.
+         *
+         * @return {@code true} if used
+         */
+        boolean keepAlive();
+
+        /**
+         * Whether to reuse address.
+         *
+         * @return {@code true} if re-used.
+         */
+        boolean reuseAddress();
+
+        /**
+         * Whether to use {@link java.net.StandardSocketOptions#TCP_NODELAY}.
+         *
+         * @return {@code true} if used
+         */
+        @ConfiguredOption("false")
+        boolean tcpNoDelay();
+    }
+
+    /**
+     * Prototype for {@link SocketOptions}.
+     */
+    public interface SocketOptionsPrototype extends ConfiguredPrototype<TypedConfig> {
+
+        /**
+         * Read timeout.
+         *
+         * @return read timeout
+         */
+        Duration readTimeout();
+
+        /**
+         * Connect timeout.
+         *
+         * @return connect timeout
+         */
+        Duration connectTimeout();
+    }
 
     @SuppressWarnings("rawtypes")
     private final Map<SocketOption, Object> socketOptions = new HashMap<>();
@@ -33,7 +116,7 @@ public class SocketOptions extends ConfiguredTypeBase<SocketOptionsConfig> imple
      */
     protected SocketOptions(SocketOptionsPrototype prototype) {
         super(prototype);
-        SocketOptionsConfig config = prototype.config();
+        TypedConfig config = prototype.config();
         socketOptions.put(SO_RCVBUF, config.receiveBufferSize());
         socketOptions.put(SO_SNDBUF, config.sendBufferSize());
         socketOptions.put(SO_REUSEADDR, config.reuseAddress());
@@ -43,12 +126,20 @@ public class SocketOptions extends ConfiguredTypeBase<SocketOptionsConfig> imple
         readTimeout = prototype.readTimeout();
     }
 
-    @Override
+    /**
+     * Get the connect timeout.
+     *
+     * @return connect timeout
+     */
     public Duration connectTimeout() {
         return connectTimeout;
     }
 
-    @Override
+    /**
+     * Get the read timeout.
+     *
+     * @return read timeout
+     */
     public Duration readTimeout() {
         return readTimeout;
     }

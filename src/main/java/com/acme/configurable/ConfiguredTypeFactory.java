@@ -8,6 +8,5 @@ import com.acme.builder.Builder;
  * @param <T> config type
  * @param <U> configured type
  */
-public interface ConfiguredTypeFactory<T extends ConfigType, U extends ConfiguredType<T>>
-        extends ConfiguredType<T>, Builder<U> {
+public interface ConfiguredTypeFactory<T extends ConfigType, U extends ConfiguredType<T>> extends Builder<U> {
 }

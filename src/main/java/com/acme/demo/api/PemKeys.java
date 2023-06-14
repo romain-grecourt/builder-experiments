@@ -1,6 +1,9 @@
 package com.acme.demo.api;
 
 import com.acme.common.PemReader;
+import com.acme.configurable.ConfigType;
+import com.acme.configurable.ConfiguredOption;
+import com.acme.configurable.ConfiguredPrototype;
 import com.acme.configurable.ConfiguredTypeBase;
 
 import java.security.PrivateKey;
@@ -13,7 +16,7 @@ import java.util.Optional;
 /**
  * {@code PKCS#8} based implementation of {@link KeysSupport}.
  */
-public class PemKeys extends ConfiguredTypeBase<PemKeysConfig> implements KeysSupport {
+public class PemKeys extends ConfiguredTypeBase<PemKeys.TypedConfig> implements KeysSupport {
 
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
@@ -26,9 +29,9 @@ public class PemKeys extends ConfiguredTypeBase<PemKeysConfig> implements KeysSu
      *
      * @param prototype prototype
      */
-    PemKeys(PemKeysPrototype prototype) {
+    PemKeys(Prototype prototype) {
         super(prototype);
-        PemKeysConfig config = prototype.config();
+        TypedConfig config = prototype.config();
         Resource privateKeyResource = prototype.privateKey();
         if (privateKeyResource != null) {
             char[] keyPassphrase = config.keyPassphrase().orElse(null);
@@ -85,5 +88,31 @@ public class PemKeys extends ConfiguredTypeBase<PemKeysConfig> implements KeysSu
     @Override
     public List<X509Certificate> certs() {
         return Collections.unmodifiableList(certs);
+    }
+
+    public interface TypedConfig extends ConfigType {
+
+        @ConfiguredOption(key = "key.resource")
+        Optional<Resource.TypedConfig> key();
+
+        @ConfiguredOption(key = "key.passphrase")
+        Optional<char[]> keyPassphrase();
+
+        @ConfiguredOption(key = "cert-chain.resource")
+        Optional<Resource.TypedConfig> certChain();
+
+        @ConfiguredOption(key = "certificates.resource")
+        Optional<Resource.TypedConfig> certificates();
+    }
+
+    public interface Prototype extends ConfiguredPrototype<TypedConfig> {
+
+        Resource privateKey();
+
+        Resource publicKey();
+
+        Resource certChain();
+
+        Resource certificates();
     }
 }

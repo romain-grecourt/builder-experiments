@@ -1,5 +1,7 @@
 package com.acme.demo.api;
 
+import com.acme.configurable.Configured;
+import com.acme.configurable.ConfiguredPrototype;
 import com.acme.configurable.ConfiguredTypeBase;
 
 import java.io.ByteArrayInputStream;
@@ -12,13 +14,51 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Resource.
  */
-public class Resource extends ConfiguredTypeBase<ResourceConfig> {
+public class Resource extends ConfiguredTypeBase<Resource.TypedConfig> {
+
+    /**
+     * {@link Resource} typed configuration.
+     */
+    @Configured
+    public interface TypedConfig extends ProxyConfig {
+
+        Optional<Path> path();
+
+        Optional<String> resourcePath();
+
+        Optional<URI> uri();
+
+        Optional<String> contentPlain();
+
+        Optional<String> content();
+    }
+
+    /**
+     * {@link Resource} prototype.
+     */
+    public interface Prototype extends ConfiguredPrototype<TypedConfig> {
+
+        /**
+         * Explicit description of the resource.
+         *
+         * @return resource description
+         */
+        String description();
+
+        /**
+         * Input stream.
+         *
+         * @return {@link InputStream}
+         */
+        InputStream inputStream();
+    }
 
     /**
      * Source of a {@link Resource}.
@@ -59,9 +99,9 @@ public class Resource extends ConfiguredTypeBase<ResourceConfig> {
     private volatile boolean streamObtained;
     private volatile byte[] cachedBytes;
 
-    protected Resource(ResourcePrototype prototype) {
+    protected Resource(Prototype prototype) {
         super(prototype);
-        ResourceConfig config = prototype.config();
+        TypedConfig config = prototype.config();
         if (config.resourcePath().isPresent()) {
             source = Source.CLASSPATH;
             location = config.resourcePath().orElseThrow();

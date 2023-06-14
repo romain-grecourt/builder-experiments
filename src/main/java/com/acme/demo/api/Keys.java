@@ -1,5 +1,7 @@
 package com.acme.demo.api;
 
+import com.acme.configurable.ConfigType;
+import com.acme.configurable.ConfiguredPrototype;
 import com.acme.configurable.ConfiguredTypeBase;
 
 import io.helidon.common.LazyValue;
@@ -15,7 +17,24 @@ import java.util.Optional;
 /**
  * Explicit implementation of {@link KeysSupport} merged with {@link PemKeys} and {@link KeyStoreKeys}.
  */
-public class Keys extends ConfiguredTypeBase<KeysConfig> implements KeysSupport {
+public class Keys extends ConfiguredTypeBase<Keys.TypedConfig> implements KeysSupport {
+
+    public interface TypedConfig extends ConfigType {
+
+        PemKeys.TypedConfig pem();
+        KeyStoreKeys.TypedConfig keystore();
+    }
+
+    public interface Prototype extends ConfiguredPrototype<TypedConfig> {
+
+        PemKeys pem();
+        KeyStoreKeys keyStore();
+        PrivateKey privateKey();
+        PublicKey publicKey();
+        X509Certificate publicCert();
+        List<X509Certificate> certChain();
+        List<X509Certificate> certificates();
+    }
 
     private final PemKeys pemKeys;
     private final KeyStoreKeys keyStoreKeys;
@@ -35,7 +54,7 @@ public class Keys extends ConfiguredTypeBase<KeysConfig> implements KeysSupport 
      *
      * @param prototype prototype
      */
-    protected Keys(KeysPrototype prototype) {
+    protected Keys(Prototype prototype) {
         super(prototype);
         pemKeys = prototype.pem();
         keyStoreKeys = prototype.keyStore();

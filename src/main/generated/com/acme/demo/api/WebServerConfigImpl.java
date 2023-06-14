@@ -1,55 +1,44 @@
 package com.acme.demo.api;
 
-import io.helidon.config.Config;
+import com.acme.configurable.ServiceProviderConfig;
+import com.acme.demo.spi.ServerConnectionSelector;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * {@link WebServerConfig} implementation.
+ * {@link WebServer.TypedConfig} implementation.
  */
-public class WebServerConfigImpl implements WebServerConfig {
+public class WebServerConfigImpl extends SocketListenerConfigImpl implements WebServer.TypedConfig {
 
-    private final Map<String, SocketListenerConfig> sockets;
+    private final Map<String, SocketListener.TypedConfig> sockets;
+    private final boolean inheritThreadLocals;
+    private final ServiceProviderConfig<ServerConnectionSelector> connectionProviders;
 
     /**
      * Create a new instance.
      *
      * @param builder builder
      */
-    WebServerConfigImpl(WebServerBuilderBase<?> builder) {
+    protected WebServerConfigImpl(WebServerBuilderBase<?> builder) {
+        super(builder);
         sockets = new HashMap<>(builder.sockets());
+        inheritThreadLocals = builder.inheritThreadLocals();
+        connectionProviders = builder.connectionProviders();
     }
 
     @Override
-    public Map<String, SocketListenerConfig> sockets() {
+    public Map<String, SocketListener.TypedConfig> sockets() {
         return sockets;
     }
 
-    /**
-     * Create a new default instance.
-     *
-     * @return new instance
-     */
-    public static WebServerConfig create() {
-        return builder().build();
+    @Override
+    public boolean inheritThreadLocals() {
+        return inheritThreadLocals;
     }
 
-    /**
-     * Create a new default instance.
-     *
-     * @return new instance
-     */
-    public static WebServerConfig create(Config config) {
-        return builder().configure(config).build();
-    }
-
-    /**
-     * Create a new builder.
-     *
-     * @return builder
-     */
-    public static WebServerConfigBuilder builder() {
-        return new WebServerConfigBuilder();
+    @Override
+    public ServiceProviderConfig<ServerConnectionSelector> connectionProviders() {
+        return connectionProviders;
     }
 }

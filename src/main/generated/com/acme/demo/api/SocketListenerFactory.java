@@ -1,49 +1,55 @@
 package com.acme.demo.api;
 
-import com.acme.configurable.ConfiguredTypeFactory;
+import com.acme.builder.Builder;
 import io.helidon.config.Config;
 
 /**
- * {@link SocketListener} factory.
+ * {@link SocketListener} support.
  */
-public class SocketListenerFactory extends SocketListenerPrototypeBase
-        implements ConfiguredTypeFactory<SocketListenerConfig, SocketListener> {
+public class SocketListenerFactory {
 
-    SocketListenerFactory(ListenerBuilder builder) {
-        super(builder);
+    private SocketListenerFactory() {
     }
 
-    @Override
-    public SocketListener build() {
-        return new SocketListener(this);
+    public static SocketListener.Prototype prototype(SocketListener.TypedConfig config) {
+        return new SocketListenerPrototypeImpl(config);
     }
 
-    /**
-     * Create a new instance.
-     *
-     * @param config typed config
-     * @return new instance
-     */
-    public static SocketListener create(SocketListenerConfig config) {
-        return new SocketListener(new SocketListenerConfigPrototype(config));
+    public static SocketListener.Prototype prototype(SocketListenerBuilder builder) {
+        return new SocketListenerPrototypeImpl(new SocketListenerConfigImpl(builder), builder);
     }
 
-    /**
-     * Create a new instance.
-     *
-     * @param config config node
-     * @return new instance
-     */
+    public static SocketListener create(SocketListener.TypedConfig config) {
+        return new SocketListener(prototype(config));
+    }
+
     public static SocketListener create(Config config) {
-        return create(ListenerConfigImpl.create(config));
+        return create(typedConfig(config));
     }
 
-    /**
-     * Create a new instance.
-     *
-     * @return new instance
-     */
     public static SocketListener create() {
-        return create(ListenerConfigImpl.create());
+        return create(typedConfig());
+    }
+
+    public static SocketListener.TypedConfig typedConfig() {
+        return new ConfigBuilder().build();
+    }
+
+    public static SocketListener.TypedConfig typedConfig(Config config) {
+        return new ConfigBuilder().configure(config).build();
+    }
+
+    public static SocketListener.TypedConfig typedConfig(SocketListenerBuilder builder) {
+        return new SocketListenerConfigImpl(builder);
+    }
+
+    private static final class ConfigBuilder
+            extends SocketListenerBuilderBase<ConfigBuilder>
+            implements Builder<SocketListener.TypedConfig> {
+
+        @Override
+        public SocketListener.TypedConfig build() {
+            return new SocketListenerConfigImpl(this);
+        }
     }
 }
