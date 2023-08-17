@@ -186,6 +186,12 @@ class Main {
 
 ## Typed Config
 
+`TypedConfig` is a "second" prototype with the purpose of being a dedicated config type that defines a strict config view.
+ It can reference other `TypedConfig` but not runtime types.
+
+`ConfiguredPrototype` is a variant of prototype that composes a `TypedConfig`. It can reference other runtime types but not
+ `TypedConfig`. It also provides a way to define builder methods that don't have a config mapping.
+
 ```java
 class Tls extends ConfiguredTypeBase<Tls.TypedConfig> {
 
