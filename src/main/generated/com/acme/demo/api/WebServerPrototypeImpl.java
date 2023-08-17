@@ -13,6 +13,7 @@ public class WebServerPrototypeImpl extends SocketListenerPrototypeImpl<WebServe
         implements WebServer.Prototype {
 
     private final Map<String, SocketListener> sockets;
+    private final Map<String, Router> routers;
     private final ContentEncodingContext contentEncodingContext;
     private final MediaContext mediaContext;
     private final List<ServerConnectionSelector> connectionSelectors;
@@ -28,6 +29,7 @@ public class WebServerPrototypeImpl extends SocketListenerPrototypeImpl<WebServe
         this.contentEncodingContext = builder.contentEncodingContext();
         this.mediaContext = builder.mediaContext();
         this.connectionSelectors = builder.connectionSelectors();
+        this.routers = Map.of();
     }
 
     /**
@@ -41,6 +43,7 @@ public class WebServerPrototypeImpl extends SocketListenerPrototypeImpl<WebServe
         this.contentEncodingContext = null; // TODO
         this.mediaContext = null; // TODO
         this.connectionSelectors = null; // TODO
+        this.routers = Map.of();
     }
 
     @Override
@@ -61,6 +64,11 @@ public class WebServerPrototypeImpl extends SocketListenerPrototypeImpl<WebServe
     @Override
     public List<ServerConnectionSelector> connectionSelectors() {
         return connectionSelectors;
+    }
+
+    @Override
+    public Map<String, Router> routers() {
+        return routers;
     }
 
     private static Map<String, SocketListener> createSockets(WebServer.TypedConfig config) {

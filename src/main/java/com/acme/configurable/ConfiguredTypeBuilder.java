@@ -1,7 +1,6 @@
 package com.acme.configurable;
 
 import com.acme.builder.Builder;
-import com.acme.builder.MetaBuilder;
 
 /**
  * A meta-builder of {@link ConfiguredType}.
@@ -10,5 +9,5 @@ import com.acme.builder.MetaBuilder;
  * @param <TARGET> the target type of the target builder
  */
 public interface ConfiguredTypeBuilder<SELF extends ConfiguredTypeBuilder<SELF, TARGET>, TARGET>
-        extends MetaBuilder<Builder<TARGET>, TARGET>, Configurable<SELF> {
+        extends Builder<TARGET>, Configurable<SELF> {
 }

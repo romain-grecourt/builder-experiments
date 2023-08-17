@@ -1,13 +1,13 @@
 package com.acme.demo.api;
 
 import java.util.List;
+import java.util.Map;
 
 import com.acme.configurable.Configured;
 import com.acme.configurable.ConfiguredOption;
 import com.acme.configurable.ConfiguredTypeBase;
 import com.acme.configurable.ServiceProviderConfig;
 import com.acme.demo.spi.ServerConnectionSelector;
-import java.util.Map;
 
 /**
  * WebServer !
@@ -69,9 +69,15 @@ public class WebServer extends ConfiguredTypeBase<WebServer.TypedConfig> {
          *
          * @return map of {@link SocketListener} keyed by socket names
          */
+        @Combined("routers")
         Map<String, SocketListener> sockets();
 
-        // TODO Map<String, Router> routers();
+        /**
+         * Get routers.
+         *
+         * @return map of {@link Router} keyed by socket names
+         */
+        Map<String, Router> routers();
 
         /**
          * Get the content encoding context.
@@ -132,6 +138,7 @@ public class WebServer extends ConfiguredTypeBase<WebServer.TypedConfig> {
      *
      * @return this instance
      */
+    @ShortHand
     public WebServer start() {
         started = true;
         return this;

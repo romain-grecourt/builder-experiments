@@ -14,12 +14,16 @@ public class WebServerFactory {
     private WebServerFactory() {
     }
 
-    public static WebServer.Prototype prototype(WebServer.TypedConfig config) {
+    private static WebServer.Prototype prototype(WebServer.TypedConfig config) {
         return new WebServerPrototypeImpl(config);
     }
 
-    public static WebServer.Prototype prototype(WebServerBuilder builder) {
+    private static WebServer.Prototype prototype(WebServerBuilder builder) {
         return new WebServerPrototypeImpl(builder);
+    }
+
+    public static WebServer create(WebServerBuilder builder) {
+        return new WebServer(prototype(builder));
     }
 
     public static WebServer create(WebServer.TypedConfig config) {

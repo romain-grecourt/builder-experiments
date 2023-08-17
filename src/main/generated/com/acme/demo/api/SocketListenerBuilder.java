@@ -1,17 +1,21 @@
 package com.acme.demo.api;
 
-import com.acme.builder.Builder;
+import com.acme.configurable.ConfiguredTypeBuilder;
 
 /**
  * {@link SocketListener} builder.
  */
-public class SocketListenerBuilder extends SocketListenerMetaBuilderBase<SocketListenerBuilder, SocketListener> {
+public final class SocketListenerBuilder
+        extends SocketListenerBuilderBase<SocketListenerBuilder>
+        implements ConfiguredTypeBuilder<SocketListenerBuilder, SocketListener> {
 
     SocketListenerBuilder() {
+        // package-private to force the use of SocketFactory
     }
 
     @Override
-    protected Builder<SocketListener> doBuild0() {
-        return () -> new SocketListener(SocketListenerFactory.prototype(this));
+    public SocketListener build() {
+        resolve();
+        return SocketListenerFactory.create(this);
     }
 }

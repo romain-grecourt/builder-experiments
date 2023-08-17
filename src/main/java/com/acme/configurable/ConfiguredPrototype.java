@@ -1,6 +1,6 @@
 package com.acme.configurable;
 
-import com.acme.builder.Prototype;
+import com.acme.builder.Builder;
 
 /**
  * A {@link ConfiguredType} with an initialization contract.
@@ -13,5 +13,5 @@ import com.acme.builder.Prototype;
  *
  * @param <T> config type
  */
-public interface ConfiguredPrototype<T extends ConfigType> extends ConfiguredType<T>, Prototype {
+public interface ConfiguredPrototype<T extends ConfigType> extends ConfiguredType<T>, Builder.Prototype {
 }

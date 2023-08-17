@@ -1,17 +1,31 @@
 package com.acme.demo.api;
 
-import com.acme.builder.Builder;
+import com.acme.configurable.ConfiguredTypeBuilder;
 
 /**
- * {@link WebServer} meta-builder.
+ * {@link WebServer} builder.
  */
-public class WebServerBuilder extends WebServerMetaBuilderBase<WebServerBuilder, WebServer> {
+public class WebServerBuilder
+        extends WebServerBuilderBase<WebServerBuilder>
+        implements ConfiguredTypeBuilder<WebServerBuilder, WebServer> {
 
     WebServerBuilder() {
+        // package-private to force the use of WebServerFactory
+    }
+
+    /**
+     * Shorthand for {@code build().start()}.
+     *
+     * @return WebServer
+     * @see WebServer#start()
+     */
+    public WebServer start() {
+        return build().start();
     }
 
     @Override
-    protected Builder<WebServer> doBuild0() {
-        return () -> new WebServer(WebServerFactory.prototype(this));
+    public WebServer build() {
+        resolve();
+        return WebServerFactory.create(this);
     }
 }

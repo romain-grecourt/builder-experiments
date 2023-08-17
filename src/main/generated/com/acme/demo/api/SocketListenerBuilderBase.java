@@ -1,16 +1,20 @@
 package com.acme.demo.api;
 
+import io.helidon.common.context.Context;
+import io.helidon.config.Config;
+
+import com.acme.builder.Builder;
 import com.acme.configurable.Configurable;
 import com.acme.configurable.ServiceProviderConfig;
 import com.acme.demo.spi.ContentEncodingProvider;
 import com.acme.demo.spi.MediaSupportProvider;
-import io.helidon.common.context.Context;
-import io.helidon.config.Config;
 
 import java.net.InetAddress;
 
 /**
  * Base builder for {@link SocketListener}.
+ * This builder is suitable for inheritance by {@link com.acme.configurable.ConfiguredType} whose
+ * {@link com.acme.configurable.ConfigType} inherits {@link SocketListener.TypedConfig}.
  *
  * @param <SELF> subtype reference
  */
@@ -37,6 +41,10 @@ public abstract class SocketListenerBuilderBase<SELF extends SocketListenerBuild
     String host() {
         return host;
     }
+
+    // config getters
+    // visibility is package-private, only used by SocketListenerConfigImpl
+    // which can be inherited so the getters don't need to be public
 
     int backlog() {
         return backlog;
@@ -66,6 +74,10 @@ public abstract class SocketListenerBuilderBase<SELF extends SocketListenerBuild
         return mediaSupport;
     }
 
+    // prototype getters
+    // visibility is package-private, only used by SocketListenerPrototypeImpl
+    // which can be inherited so the getters don't need to be public
+
     Context context() {
         return context;
     }
@@ -73,6 +85,10 @@ public abstract class SocketListenerBuilderBase<SELF extends SocketListenerBuild
     InetAddress bindAddress() {
         return bindAddress;
     }
+
+    // ------------------------
+    // builder fluent methods
+    // ------------------------
 
     /**
      * Set the port.
@@ -148,6 +164,11 @@ public abstract class SocketListenerBuilderBase<SELF extends SocketListenerBuild
         return me();
     }
 
+    /**
+     * Resolve values before {@link Builder#build()}.
+     */
+    // Note: resolve() is not part of an API to keep the visibility protected
+    // We could introduce a base class, but there is little value
     protected void resolve() {
         try {
             if (bindAddress == null) {

@@ -13,7 +13,6 @@ import com.acme.configurable.ServiceProviderConfig;
 import com.acme.demo.spi.ContentEncodingProvider;
 import com.acme.demo.spi.MediaSupportProvider;
 
-
 /**
  * Socket listener.
  */
@@ -131,7 +130,7 @@ public class SocketListener extends ConfiguredTypeBase<SocketListener.TypedConfi
         @Option(initializer = "io.helidon.common.Context::create")
         Context context();
 
-        @Alias(value = "host", initializer = "java.net.InetAddress::getByName")
+        @Alias(value = "host", resolver = "java.net.InetAddress::getByName")
         InetAddress bindAddress();
     }
 }

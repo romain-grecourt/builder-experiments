@@ -1,11 +1,13 @@
 package com.acme.configurable;
 
+import com.acme.builder.RuntimeType;
+
 /**
  * Base implementation of {@link ConfiguredType}.
  *
  * @param <T> config type
  */
-public abstract class ConfiguredTypeBase<T extends ConfigType> implements ConfiguredType<T> {
+public abstract class ConfiguredTypeBase<T extends ConfigType> implements ConfiguredType<T>, RuntimeType {
 
     private final T config;
 

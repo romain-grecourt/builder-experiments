@@ -19,6 +19,10 @@ public class SocketListenerFactory {
         return new SocketListenerPrototypeImpl(new SocketListenerConfigImpl(builder), builder);
     }
 
+    public static SocketListener create(SocketListenerBuilder builder) {
+        return new SocketListener(prototype(builder));
+    }
+
     public static SocketListener create(SocketListener.TypedConfig config) {
         return new SocketListener(prototype(config));
     }
