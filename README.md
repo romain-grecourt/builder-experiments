@@ -16,7 +16,9 @@ The obvious advantages for code generating builders are:
 
 However, the downfalls are:
 - Forward references to generated code
+  - can't be avoided, but can be minimized
 - Obscure code generator "configuration"
+  - complex codegen with annotations will always be somewhat obscure
 
 ## Builder Input
 
@@ -176,10 +178,8 @@ class Main {
     public static void main(String[] args) {
       System.out.print(server.prototype().listener().port()); // 1234 (effective port)
       System.out.print(server.prototype().listener().prototype().port()); // 0
-      System.out.print(server.typedConfig().listener().port()); // 0
-      System.out.print(server.prototype().listener().tls().privateKey()); // java.security.privateKey@12345 (toString)
-      System.out.print(server.prototype().listener().prototype().tls().prototype().privateKey()); // java.security.privateKey@12345 (toString)
-      System.out.print(server.typedConfig().listener().tls().privateKey()); // server.p12
+      System.out.print(server.prototype().listener().tls().privateKey()); // java.security.privateKey@12345 (loaded private key)
+      System.out.print(server.prototype().listener().prototype().tls().prototype().privateKey()); // server.p12 (configured private key)
     }
 }
 ```
@@ -262,10 +262,21 @@ class Server extends ConfiguredTypeBase<Tls.TypedConfig> {
 }
 ```
 
+```java
+class Main {
+    public static void main(String[] args) {
+        System.out.print(server.prototype().listener().port()); // 1234 (effective port)
+        System.out.print(server.typedConfig().listener().port()); // 0 (configured port)
+        System.out.print(server.prototype().listener().tls().privateKey()); // java.security.privateKey@12345 (loaded private key)
+        System.out.print(server.typedConfig().listener().tls().privateKey()); // server.p12 (configured private key)
+    }
+}
+```
+
 ## Implementation
 
-TODO
+TODO describe the generated code needed to support `TypedConfig`.
 
 ## Visibility
 
-TODO
+TODO describe how exposes the minimum require to reduce the API surface.
