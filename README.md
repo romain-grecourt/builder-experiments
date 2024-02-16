@@ -31,7 +31,7 @@ The `Prototype` is an immutable version of the builder that is valid outside the
 ```java
 class Greeting {
 
-    interface Prototype extends Builder.prototype {
+    interface Prototype extends Builder.Prototype {
         String message();
     }
 
@@ -62,7 +62,7 @@ class GreetingBuilder {
     }
 
     Greeting build() {
-        return new Greeting(new PrototypeImpl(message));
+        return new Greeting(new PrototypeImpl(this));
     }
 
     // code-generated
@@ -89,7 +89,7 @@ E.g.
 ```java
 class SocketListener {
 
-    interface Prototype extends Builder.prototype {
+    interface Prototype extends Builder.Prototype {
         int port(); // defaults to 0
         String host(); // defaults to 0.0.0.0
     }
@@ -117,7 +117,7 @@ Otherwise, it wouldn't be possible to re-use runtime objects instances.
 ```java
 class Tls {
 
-    interface Prototype extends Builder.prototype {
+    interface Prototype extends Builder.Prototype {
         String privateKey(); // resource path to a keystore
     }
 
@@ -134,7 +134,7 @@ class Tls {
 
 class SocketListener {
 
-    interface Prototype extends Builder.prototype {
+    interface Prototype extends Builder.Prototype {
         Tls tls();
         int port();
         String host();
@@ -160,7 +160,7 @@ class SocketListener {
 
 class Server {
 
-    interface Prototype extends Builder.prototype {
+    interface Prototype extends Builder.Prototype {
         SocketListener listener();
     }
 
@@ -176,10 +176,21 @@ I.e. a config view is an object with the same structure as the runtime object bu
 ```java
 class Main {
     public static void main(String[] args) {
-      System.out.print(server.prototype().listener().port()); // 1234 (effective port)
-      System.out.print(server.prototype().listener().prototype().port()); // 0
-      System.out.print(server.prototype().listener().tls().privateKey()); // java.security.privateKey@12345 (loaded private key)
-      System.out.print(server.prototype().listener().prototype().tls().prototype().privateKey()); // server.p12 (configured private key)
+      // complex object reference existing runtime objects
+      System.out.println(server.prototype().listener().port()); // 1234 (effective port)
+      System.out.println(server.prototype().listener().tls().privateKey()); // java.security.privateKey@12345 (loaded private key)
+
+      // we are forced to invoke .prototype for each member to get the configured values
+      System.out.println(server.prototype().listener().prototype().port()); // 0
+      System.out.println(server.prototype().listener().prototype().tls().prototype().privateKey()); // server.p12 (configured private key)
+
+      // Instead, here is what we really want...
+      // Use the runtime API to get the runtime values
+      System.out.println(server.listener().port()); // 1234 (effective port)
+      System.out.println(server.listener().tls().privateKey()); // java.security.privateKey@12345 (loaded private key)
+      // Use the prototype API to get the configured values
+      System.out.println(server.prototype().listener().port()); // 0
+      System.out.println(server.prototype().listener().tls().privateKey()); // server.p12 (configured private key)
     }
 }
 ```
